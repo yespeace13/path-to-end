@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+skinparam responseMessageBelowArrow true
+autonumber
+
+
+Client -> ImagerController : getImageWithIntersect()
+ImagerController -> GeoserverIntersector : image()
+
+GeoserverIntersector ->  QueryFilterMaker :createGeomFilter()
+QueryFilterMaker -> GeoserverIntersector : Collection<Filter>
+
+GeoserverIntersector -> BBoxMaker :getBBox()
+BBoxMaker -> GeoserverIntersector : BBox
+
+GeoserverIntersector -> BBoxScaler : getScaledBBox()
+BBoxScaler -> GeoserverIntersector : BBox
+
+loop Для каждого объекта фильтра
+    GeoserverIntersector -> GeoserverUtil : getImage()
+    GeoserverUtil -> GeoserverIntersector : BufferedImage
+end
+GeoserverIntersector -> ImageCombiner : combineImage
+ImageCombiner -> GeoserverIntersector : BufferedImage
+
+GeoserverIntersector -> ImagerController : ImageAnswer
+ImagerController -> Client : Response
+@enduml

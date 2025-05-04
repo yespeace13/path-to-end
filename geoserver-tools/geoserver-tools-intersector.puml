@@ -1,0 +1,48 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class IntersectorController {
+    + IntersectResult findIntersect(IntersectRequest intersect,SpatialMethods method)
+}
+
+class GeoserverIntersector {
+    + IntersectResult intersect(IntersectRequest intersect,\nSpatialMethods method)
+    - Collection<Filter> getFilters(\nList<IntersectRequest> intersects,\nSpatialMethods method)
+    - LayerFeature getOrAddLayerFeature(\nIntersectResult intersectResult,\nMap<String, Object> additionalProperties)
+    - FeatureResult getLayerFeature(Feature pojoFeature)
+}
+
+interface QueryFilterMaker {
+    {abstract} + void createGeomFilter(String filterSource, \nIntersectRequest intersect, LinkedList<Filter> filters,\nAddFilter addFilterFunction, SpatialMethods method)
+}
+
+class GeomQueryFilterMaker {
+    + void createGeomFilter(String filterSource, \nIntersectRequest intersect, LinkedList<Filter> filters,\nAddFilter addFilterFunction, SpatialMethods method)
+}
+
+class LayerQueryFilterMaker {
+    + void createGeomFilter(String filterSource, \nIntersectRequest intersect, LinkedList<Filter> filters,\nAddFilter addFilterFunction, SpatialMethods method)
+}
+
+class GeomProcessor {
+    # List<Geometry> getGeoms(Collection<Filter> filters)
+    # List<Feature> getGeometryFromLayer(\nString filter, String layer, int epsg)
+}
+
+class GeoserverUtil {
+    + String getGeometry(String filter, String layer, String namespace, int epsg)
+}
+
+enum BBoxScalerType {
+    DEFAULT
+    RANK
+}
+IntersectorController --> GeoserverIntersector
+
+GeomQueryFilterMaker ..|> QueryFilterMaker
+LayerQueryFilterMaker ..|> QueryFilterMaker
+GeoserverIntersector --> GeoserverUtil
+GeoserverIntersector --> QueryFilterMaker
+GeomQueryFilterMaker ..|> GeomProcessor
+
+@enduml

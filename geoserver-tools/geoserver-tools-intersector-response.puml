@@ -1,0 +1,36 @@
+@startuml
+class IntersectResult {
+    - List<LayerFeature> features
+}
+
+class LayerFeature {
+    - Map<String, Object> additionalProperties
+    - Set<Layer> layer
+}
+
+class Layer {
+    - String layerName
+    - List<FeatureResult> features
+}
+
+class FeatureResult {
+    - List<Ring> rings;
+    - Map<String, Object> additionalProperties
+}
+
+class Ring{
+    - List<Point> points
+}
+
+class Point {
+    - double lon
+    - double lat
+}
+
+IntersectResult *-- LayerFeature
+LayerFeature *--  Layer
+Layer  *--  FeatureResult
+FeatureResult  *--  Ring
+Ring  *--  Point
+
+@enduml

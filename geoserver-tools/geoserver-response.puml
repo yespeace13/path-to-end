@@ -1,0 +1,39 @@
+@startuml
+'https://plantuml.com/class-diagram
+class GeomObject {
+  - List<Feature> features
+  - Map<String, Object> additionalProperties {readOnly}
+}
+
+class Feature {
+  - Geometry geometry
+  - Properties properties
+  - Map<String, Object> additionalProperties {readOnly}
+
+  + getAdditionalProperties() : Map<String, Object>
+  + setAdditionalProperty(String, Object)
+}
+
+
+class Geometry {
+  - type: String
+  - coordinates: List<?>
+}
+
+class Properties {
+  - objectid: Integer
+  - additionalProperties: Map<String, Object>
+}
+
+GeomObject *-- Feature
+Feature *--  Geometry
+Feature  *--  Properties
+
+
+'Расширение 	<|-- 	Специализация класса в иерархии
+'Реализация 	<|.. 	Реализация интерфейса классом
+'Композиция 	*-- 	Часть не может существовать без целого
+'Агрегация 	o-- 	Часть может существовать независимо от целого
+'Зависимость 	--> 	Объект использует другой объект
+'Зависимость 	..> 	Более слабая форма зависимости
+@enduml

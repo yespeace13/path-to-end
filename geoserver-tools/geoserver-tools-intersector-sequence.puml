@@ -1,0 +1,22 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+skinparam responseMessageBelowArrow true
+autonumber
+
+Client -> IntersectorController: findIntersect()
+IntersectorController -> GeoserverIntersector : intersect()
+
+GeoserverIntersector ->  QueryFilterMaker :createGeomFilter()
+QueryFilterMaker -> GeoserverIntersector : Collection<Filter>
+
+GeoserverIntersector -> GeoserverIntersector : getIntersectResult()
+loop Для каждого объекта фильтра
+    GeoserverIntersector -> GeoserverUtil : getGeometry()
+    GeoserverUtil -> GeoserverIntersector : String
+end
+
+GeoserverIntersector -> IntersectorController : IntersectResult
+IntersectorController -> Client : IntersectResult
+
+@enduml

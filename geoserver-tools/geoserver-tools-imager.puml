@@ -1,0 +1,85 @@
+@startuml
+'https://plantuml.com/class-diagram
+
+class ImagerController {
+    + void getImageWithIntersect(Double scaleStart,
+        List<IntersectRequest> intersects,
+        BBoxScalerType scalerType)
+    -  void imageToResponse(HttpServletResponse response, ImageAnswer img)
+}
+
+class GeoserverIntersector {
+    - Map<BBoxScalerType, BBoxScaler> scaler
+    + void image(List<IntersectRequest> intersects,
+        Double scaleStart, BBoxScalerType scalerType)
+    - void getFilters(List<IntersectRequest> intersects,
+        SpatialMethods method)
+    - BBox recalcBBox(List<IntersectRequest> intersects,
+        Collection<Filter> filters, Double scale,
+        BBoxScalerType type)
+}
+
+interface BBoxMaker{
+    {abstract} + BBox getBBox(Collection<Filter> filters)
+}
+
+class CoordBBoxMaker {
+    + BBox getBBox(Collection<Filter> filters)
+    - BBox getBBox(List<Geometry> geoms)
+}
+
+class ResponseBBoxMaker {
+    + BBox getBBox(Collection<Filter> filters)
+    - List<BBox> getBBoxes(Collection<Filter> filters)
+    - BBox getBBoxFromLayer(String filter, String layer, int epsg)
+    - BBox getBBox(List<BBox> bBoxes)
+}
+
+class GeomProcessor {
+    # List<Geometry> getGeoms(
+        Collection<Filter> filters)
+    # List<Feature> getGeometryFromLayer(
+        String filter, String layer, int epsg)
+}
+
+interface BBoxScaler {
+    {abstract} + BBox getScaledBBox(BBox bBox, Double scaleStart)
+}
+
+class DefaultBBoxScaler {
+    + BBox getScaledBBox(BBox bBox, Double scaleStart)
+}
+
+class RankBBoxScaler {
+    + BBox getScaledBBox(BBox bBox, Double scaleStart)
+}
+
+class ImageCombiner{
+    + {static} BufferedImage combineImage(List<BufferedImage> images)
+}
+
+class GeoserverUtil {
+    - {static} String geoserverUrl
+    + {static} BufferedImage getImage(layers: String, \n filters: String, bbox: String, names: String, \n transparent: Boolean, epsg: Integer)
+}
+
+enum BBoxScalerType {
+    DEFAULT
+    RANK
+}
+
+ImagerController --> GeoserverIntersector
+GeoserverIntersector --> BBoxMaker
+
+CoordBBoxMaker ..|> BBoxMaker
+ResponseBBoxMaker ..|> BBoxMaker
+CoordBBoxMaker --|> GeomProcessor
+
+DefaultBBoxScaler ..|> BBoxScaler
+RankBBoxScaler ..|> BBoxScaler
+
+BBoxScaler <-- GeoserverIntersector
+GeoserverIntersector --> ImageCombiner
+GeoserverIntersector --> GeoserverUtil
+
+@enduml
