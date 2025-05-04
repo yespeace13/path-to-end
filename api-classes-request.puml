@@ -1,0 +1,139 @@
+@startuml
+!pragma layout smetana
+class RequestController {
+  + ResponseListDTO<RequestDTO> getRequests(EntityCondition filter, SortFields sort, LimitOffset limit, String registry, Long statusStage)
+  + RequestDTO getRequest(Long id)
+  + RequestDTO createRequest(RequestDTO requestDto)
+  + RequestDTO updateRequest(Long id, RequestDTO requestDto)
+  + boolean checkRequest(Long id)
+  + void deleteRequest(Long id)
+  + void changeRequestStatus(Long id, Long to)
+}
+
+class RequestService {
+  + ResponseListDTO<RequestEntity> getRequests(EntityCondition filter, SortFields sort, LimitOffset limit, String registry, Long statusStage)
+  + RequestEntity getRequest(Long id)
+  + RequestEntity createRequest(RequestDTO requestDto)
+  + RequestEntity updateRequest(Long id, RequestDTO requestDto)
+  + boolean checkRequest(Long id)
+  + void deleteRequest(Long id)
+  + void changeRequestStatus(Long id, Long to)
+}
+
+
+class ServiceService {
+}
+
+class DynamicMapper {
+  + TView toDto(TEntity entity)
+  + TEntity toEntity(TView entity)
+  + TEntity toEntity(TEntity entity, TView entity)
+}
+
+
+RequestController --> RequestService
+RequestController --> ServiceService
+RequestController --> DynamicMapper
+
+class RequestDTO {
+}
+
+class ResponseListDTO<T> {
+}
+
+RequestController --> RequestDTO
+RequestController --> ResponseListDTO
+
+
+class RequestDTO {
+  - LocalDate registerDate
+  - String registerNumber
+  - DepartmentDTO department
+  - PersonDTO declarant
+  - StatusDTO status
+  - RepresentativeDTO representative
+  - DelegationDTO userDelegation
+  - UserDTO assignedTo
+  - Boolean result
+  - Integer factTime
+  - LocalDate finishDate
+  - LocalDate calculatedDate
+  - Integer priorityId
+  - PersonDTO author
+  - List<RequestCauseDTO> causes
+  - UserDTO creator
+  - LocalDateTime creationTime
+  - Integer forbidden = 12
+}
+
+class ServiceDTO {
+  - Long id
+  - String nameFull
+  - String nameShort
+  - ReglamentDTO reglament
+  - LocalDate activeFrom
+  - LocalDate activeTo
+  - Boolean personEnabled = true
+  - Boolean businessmanEnabled = true
+  - Boolean companyEnabled = true
+  - String picUrl
+  - List<ServiceCostDTO> costs
+  - StatusGroupDTO statusGroup
+  - ObjectTypeDTO objectType
+  - CardViewDTO cardView
+  - String serviceCode
+  - Integer orderNumber
+  - Integer restrictions
+}
+
+class ApplicantDTO {
+  - Long id
+  - int typeId
+  - Long personId
+  - Long organizationId
+
+  ' Common fields
+  - String name
+  - String inn
+  - String legalAddress
+  - String factAddress
+  - String phone
+  - String email
+
+  ' Individual fields
+  - String lastName
+  - String firstName
+  - String patronymic
+  - String snils
+  - LocalDate birthday
+  - String ogrn
+
+  ' Organization fields
+  - String fullName
+  - String kpp
+}
+
+class DelegationDTO {
+  - Long id
+  - String position
+  - String name
+  - String num
+  - List<FileDTO> files
+  - LocalDate start
+  - LocalDate until
+  - String note
+  - String issuer
+}
+
+RequestDTO "1" *-- "1" ServiceDTO
+RequestDTO "1" *-- "1" ProviderDTO
+RequestDTO "1" *-- "1" DepartmentDTO
+RequestDTO "1" *-- "1" PersonDTO
+RequestDTO "1" *-- "1" StatusDTO
+RequestDTO "1" *-- "1" ApplicantDTO
+RequestDTO "1" *-- "1" RepresentativeDTO
+RequestDTO "1" *-- "1" DelegationDTO
+RequestDTO "1" *-- "1" UserDTO
+RequestDTO "1" *-- "1" PersonDTO
+RequestDTO "1" *-- "*" RequestCauseDTO
+@enduml

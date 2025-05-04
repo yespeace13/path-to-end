@@ -1,0 +1,254 @@
+@startuml
+class Заявление {
+- LocalDate ДатаРегистрации
+- String НомерРегистрации
+'- Статус Статус
+'- ФизЛицо ФизЛицо
+- Boolean Результат
+- Integer ФактВремяОказанияУслуги
+- LocalDate ФактДатаЗавершенияРабот
+- Boolean ИсточникЗаявления
+- LocalDate calculatedDate
+'- ФизЛицо СоздательЗаявления
+'- Представитель Представитель
+'- Заявитель Заявитель
+'- List<ПричинаОтказа> ПричиныОтказа
+- Integer Приоритет
+'- RequestPriorityEnum requestPriority
+}
+Заявление o-- Статус
+Заявление o-- ФизЛицо
+Заявление o-- ФизЛицо
+Заявление o-- Представитель
+Заявление o-- Заявитель
+
+class Статус {
+- String Название
+- Integer Ограничения
+- Integer РазрешениеСоздания
+- Long ЭтапРассмотрения
+'- StatusStageEnum statusStage
+}
+
+class ФизЛицо {
+- String Фамилия
+- String Имя
+- String Отчество
+- String СНИЛС
+- LocalDate ДатаРождения
+- String ИНН
+- String АдресРегистрации
+- String ФактАдрес
+- String Телефон
+- String Почта
+- String Пол
+}
+
+class ОрганизацияФизЛица {
+'- PersonEntity person
+- int ТипОрганизации
+'- OrganizationEntity organization
+- String Должность
+}
+
+ОрганизацияФизЛица "1" o-- "1" ФизЛицо
+ОрганизацияФизЛица "N" --o "1" Организация
+
+class Представитель {
+- int ТипПредставителя
+'- Long ИденФизЛица
+'- Long Организация
+- String Название
+- String ИНН
+- String АдресРегистрации
+- String ФактАдрес
+- String Телефон
+- String Почта
+- String Фамилия
+- String Имя
+- String Отчество
+- String СНИЛС
+- LocalDate ДатаРождения
+- String ОГРН
+- String ПолноеНазвание
+- String КПП
+'- RequestEntity request
+}
+
+Представитель o-- Организация
+Представитель o-- ФизЛицо
+Представитель o-- ТипПредставителя
+
+class Заявитель {
+- int ТипПредставителя
+'- Long ИденФизЛица
+'- Long Организация
+- String Название
+- String ИНН
+- String АдресРегистрации
+- String ФактАдрес
+- String Телефон
+- String Почта
+- String Фамилия
+- String Имя
+- String Отчество
+- String СНИЛС
+- LocalDate ДатаРождения
+- String ОГРН
+- String ПолноеНазвание
+- String КПП
+'- RequestEntity request
+}
+
+Заявитель o-- Организация
+Заявитель o-- ФизЛицо
+Заявитель o-- ТипПредставителя
+
+class ТипПредставителя {
+    Long Идентификатор
+    String Наименование
+}
+
+class Организация {
+- String Название
+- String ИНН
+- String ОГРН
+- String АдресРегистрации
+- String ФактАдрес
+- String Телефон
+- String Почта
+- int ТипОрганизации
+}
+
+class Документ {
+- Long ТипСущности
+- CardViewEntity cardView
+- String Номер
+- String Название
+- String Создатель
+- LocalDate ДатаДействия
+- String Описание
+'- List<StoredFileEntity> files
+- String ЭлекПодписьИнфо
+- int СтатусЭП
+- boolean ВнешПодпись
+'- Map<String,Object> values
+}
+
+class ДокументЗаявление {
+'- Заявление request
+'- Документ document
+'- ServiceDocumentEntity serviceDocument
+}
+ДокументЗаявление --o Заявление
+ДокументЗаявление --o Документ
+
+Документ "1" o-- "N" ОбъектФайла
+
+class ОбъектФайла {
+- String Название
+- String ПутьКФайлу
+- String Формат
+- int Размер
+- String ХэшФайла
+- boolean Временный
+- boolean Удален
+- Integer НомерПорядка
+- String MIME-тип
+- LocalDateTime ВремяПроверки
+- Long СтатусПроверки
+'- {static} String[] reversedRelationsNames
+'- List<ServiceDocumentEntity> serviceDocuments
+'- List<DelegationToRequestEntity> delegationToRequestEntities
+'- List<DocumentEntity> documentEntities
+'- List<UserDelegationEntity> userDelegationEntities
+'- {static} void checkReversedRelations()
+'- {static} List<Field> getActualReversedRelations()
+'- {static} HashSet<String> getReversedRelationsSet()
+}
+
+class ИтоговыйДокументЗаявления {
+'- RequestDocumentEntity requestDocument
+}
+ИтоговыйДокументЗаявления "1" o-- "1" ДокументЗаявление
+
+class ПричиныОтказаЗаявления {
+'- Заявление request
+'- CauseEntity cause
+- String detail
+- String recommendation
+}
+
+ПричиныОтказаЗаявления o-- Заявление
+ПричиныОтказаЗаявления o-- ПричинаОтказа
+
+class ПричинаОтказа {
+- String КороткоеНазвание
+- String ПолноеНазвание
+- boolean Активно
+- LocalDate АктивноСДаты
+- LocalDate АктивноДоДаты
+'- ServiceEntity service
+}
+
+class ЭтапСтатуса {
+- Long Идентификатор
+- String Название
+}
+
+class ИсторияСтатуса {
+- Long Идентификатор
+'- RequestEntity request
+'- UserEntity user
+'- StatusEntity status
+- LocalDateTime ДатаИзменения
+}
+
+ИсторияСтатуса --o Заявление
+ИсторияСтатуса --o Статус
+
+class УведомленияПользователя {
+- String Кому
+- String Сообщение
+- boolean Прочитано
+'- PersonEntity person
+- Integer Категория
+- String Почта
+'- RequestEntity request
+'- ServiceEntity service
+- LocalDateTime ВремяОтправки
+- String СтатусОтправки
+}
+
+ФизЛицо --o УведомленияПользователя
+УведомленияПользователя o-- Заявление
+
+
+class СтатусУведомления {
+'- Long notificationId
+- StatusPathEntity ПереходУведомления
+- Boolean УведомлятьВладельца
+- Boolean УведомлятьЗаявителя
+- Boolean УведомлятьПредставителя
+- Boolean УведомлятьПодписантов
+- String ШаблонСообщения
+- String ШаблонОтправителя
+}
+СтатусУведомления --o УведомленияПользователя
+СтатусУведомления "1" --o "N" ПереходСтатуса
+
+
+class ПереходСтатуса {
+- String Заголовок
+- String Описание
+- StatusEntity ИзСтатуса
+- StatusEntity ВСтатус
+# boolean Завершен
+'- StatusGroupEntity statusGroup
+- Integer Ограничения
+- Integer РазрешениеСоздания
+- String ТекстСкрипта
+- Integer НомерВПорядке
+'- List<StatusNotifyEntity> statusNotifications
+}
+@enduml

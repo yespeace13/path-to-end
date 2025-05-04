@@ -1,0 +1,26 @@
+@startuml
+class tk.eservice.model.db.StatusEntity {
+- String name
+- Integer restrictions
+- Integer creatorPermissions
+- Long stageId
+- StatusStageEnum statusStage
++ String getName()
++ void setName(String)
++ Integer getRestrictions()
++ void setRestrictions(Integer)
++ Integer getCreatorPermissions()
++ void setCreatorPermissions(Integer)
++ Long getStageId()
++ void setStageId(Long)
++ StatusStageEnum getStatusStage()
++ void setStatusStage(StatusStageEnum)
++ String toString()
+}
+
+
+
+
+tk.security.ObjectRestrictions <|.. tk.eservice.model.db.StatusEntity
+tk.eservice.model.db.AbstractEntity <|-- tk.eservice.model.db.StatusEntity
+@enduml

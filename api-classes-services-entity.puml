@@ -1,0 +1,118 @@
+@startuml
+'skinparam groupInheritance 4
+'page 2x1
+'skinparam pageMargin 10
+'skinparam pageExternalColor gray
+'skinparam pageBorderColor black
+
+
+class ServiceDTO {
+  - Long id
+  - String nameFull
+  - String nameShort
+  - LocalDate activeFrom
+  - LocalDate activeTo
+  - Boolean personEnabled = true
+  - Boolean businessmanEnabled = true
+  - Boolean companyEnabled = true
+  - String picUrl
+  - String serviceCode
+  - Integer orderNumber
+  - Integer restrictions
+}
+
+class ReglamentDTO {
+  - Long id
+  - String name
+  - String number
+  - LocalDate beginDate
+  - LocalDate endDate
+  - String url
+  - String info
+}
+
+class ProviderDTO {
+  - Long id
+  - String nameFull
+  - String nameShort
+  - String inn
+  - String kpp
+  - String ogrn
+  - String addressLegal
+  - String addressPostal
+  - String position
+  - String fio
+  - String contact
+  - String picUrl
+  - Integer restrictions
+}
+
+class CauseDTO {
+  - Long id
+  - String nameShort
+  - String nameFull
+  - LocalDate activeFrom
+  - LocalDate activeTo
+  - Long serviceId
+}
+
+class ServiceCostDTO {
+- Long id
+- String cost
+- boolean personEnabled
+- boolean businessmanEnabled
+- boolean companyEnabled
+- LocalDate activeFrom
+- LocalDate activeTo
+}
+
+class ServiceCostDTO {
+- Long id
+- String cost
+- boolean personEnabled
+- boolean businessmanEnabled
+- boolean companyEnabled
+- LocalDate activeFrom
+- LocalDate activeTo
+}
+
+class ServiceDurationDTO {
+- Long id
+- int duration
+- boolean personEnabled
+- boolean businessmanEnabled
+- boolean companyEnabled
+- int typeDate
+- LocalDate activeFrom
+- LocalDate activeTo
+- int priority
+- Integer calculationPointType
+}
+
+class ServiceCostDTO {
+- Long id
+- String cost
+- boolean personEnabled
+- boolean businessmanEnabled
+- boolean companyEnabled
+- LocalDate activeFrom
+- LocalDate activeTo
+}
+
+class ServiceDocumentDTO {
+- Long id
+- String cost
+- boolean personEnabled
+- boolean businessmanEnabled
+- boolean companyEnabled
+- LocalDate activeFrom
+- LocalDate activeTo
+}
+
+ServiceDTO "1" *-- "1" ReglamentDTO
+ServiceDTO "1" *-- "*" ProviderDTO
+ServiceDTO "1" *-- "*" CauseDTO
+ServiceDTO "1" *-- "*" ServiceCostDTO
+ServiceDTO "1" *-- "*" ServiceDurationDTO
+ServiceDTO "1" *-- "*" ServiceDocumentDTO
+@enduml

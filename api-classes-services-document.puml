@@ -1,0 +1,82 @@
+@startuml
+page 4x1
+top to bottom direction
+class api.FileController {
+  + void uploadFile(MultipartFile file, Long objectId)
+  + void deleteFile(Long fileId, Long objectId)
+  + void downloadFile(HttpServletResponse response, Long fileId)
+  + List<StoredFileDTO> getAll(Long objectId)
+  + StoredFileDTO getById(Long fileId)
+}
+
+class api.ServiceDocumentController {
+  + ResponseListDTO<ServiceDocumentDTO> getAll(EntityCondition filter, SortFields sort, LimitOffset limit, String registry, Long statusStage)
+  + ServiceDocumentDTO getOne(Long id)
+  + ServiceDocumentDTO create(Long id)
+  + ServiceDocumentDTO update(Long id, ServiceDocumentDTO dto)
+  + void remove(Long id)
+  + List<ServiceDocumentDTO> getProvidedDocumentTypes(Long,SortFields)
+}
+class api.ServiceService {
+
+}
+
+
+class api.ServiceDocumentService {
+  + ResponseListDTO<ServiceDocumentEntity> getServices(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
+  + ServiceDocumentEntity getService(Long id)
+  + ServiceDocumentEntity createService(Long id)
+  + ServiceDocumentEntity updateService(Long id, ServiceDocumentEntity dto)
+  + void removeService(Long id)
+  + void changeServiceState(Long id, int stateId)
+}
+
+class infrastructure.DynamicMapper {
+  + TView toDto(TEntity entity)
+  + TEntity toEntity(TView entity)
+  + TEntity toEntity(TEntity entity, TView entity)
+}
+
+class dto.ServiceDocumentDTO {
+- Long id
+- String cost
+- boolean personEnabled
+- boolean businessmanEnabled
+- boolean companyEnabled
+- LocalDate activeFrom
+- LocalDate activeTo
+}
+
+class dto.FileDTO {
+- String id
+- String name
+- Integer size
+- String extension
+- Integer orderNumber
+- String mimeType
+- String comment
+}
+ServiceDocumentDTO "1" *-u- "1" FileDTO
+
+
+class api.ServiceDocumentRepository {
++ Class<ServiceEntity> getEntityClass()
++ List<ServiceEntity> findByNameShort(String)
++ List<ServiceEntity> findByTextSearchOnAllAttr(String)
+}
+
+class db.ServiceDocumentEntity {
+}
+
+ServiceDocumentController --|> FileController
+
+ServiceDocumentController -u-> ServiceDocumentDTO
+ServiceDocumentController --> ServiceDocumentService
+ServiceDocumentController -u-> DynamicMapper
+ServiceDocumentService --> ServiceDocumentRepository
+ServiceDocumentRepository --> ServiceDocumentEntity
+ServiceDocumentService --> ServiceDocumentEntity
+DynamicMapper --> ServiceDocumentEntity
+ServiceDocumentService --> ServiceService
+
+@enduml

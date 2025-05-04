@@ -1,0 +1,60 @@
+@startuml
+
+class api.ServiceController {
+  + ResponseListDTO<ServiceDTO> getServices(EntityCondition filter, SortFields sort, LimitOffset limit, String registry, Long statusStage)
+  + ServiceDTO getService(Long id)
+  + ServiceDTO createService(Long id)
+  + ServiceDTO updateService(Long id, ServiceDTO dto)
+  + void removeService(Long id)
+  + void changeServiceState(Long id, int stateId)
+}
+
+class api.ServiceService {
+  + ResponseListDTO<ServiceEntity> getServices(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
+  + ServiceEntity getService(Long id)
+  + ServiceEntity createService(Long id)
+  + ServiceEntity updateService(Long id, ServiceEntity dto)
+  + void removeService(Long id)
+  + void changeServiceState(Long id, int stateId)
+}
+
+class infrastructure.DynamicMapper {
+  + TView toDto(TEntity entity)
+  + TEntity toEntity(TView entity)
+  + TEntity toEntity(TEntity entity, TView entity)
+}
+
+class dto.ServiceDTO {
+
+}
+
+class api.ServiceRepository {
++ Class<ServiceEntity> getEntityClass()
++ List<ServiceEntity> findByNameShort(String)
++ List<ServiceEntity> findByTextSearchOnAllAttr(String)
+}
+
+class db.ServiceEntity {
+'- String nameFull
+'- String nameShort
+'- LocalDate activeFrom
+'- LocalDate activeTo
+'- boolean personEnabled
+'- boolean businessmanEnabled
+'- boolean companyEnabled
+'- String picUrl
+'- int state
+'- Integer restrictions
+'- String serviceCode
+'- String scriptText
+'- Integer orderNumber
+}
+
+ServiceController --> ServiceDTO
+ServiceController --> ServiceService
+ServiceController --> DynamicMapper
+ServiceService --> ServiceRepository
+ServiceRepository --> ServiceEntity
+ServiceService --> ServiceEntity
+DynamicMapper --> ServiceEntity
+@enduml
