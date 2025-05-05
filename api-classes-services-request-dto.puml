@@ -1,0 +1,148 @@
+@startuml
+package dto{
+
+  class RequestDTO {
+    - LocalDate registerDate
+    - String registerNumber
+  '  - ServiceDTO service
+  '  - ProviderDTO provider
+  '  - DepartmentDTO department
+  '  - PersonDTO declarant
+  '  - StatusDTO status
+  '  - ApplicantDTO applicant
+  '  - RepresentativeDTO representative
+  '  - DelegationDTO userDelegation
+  '  - UserDTO assignedTo
+    - Boolean result
+    - Integer factTime
+    - LocalDate finishDate
+    - LocalDate calculatedDate
+    - Integer priorityId
+  '  - PersonDTO author
+  '  - List<RequestCauseDTO> causes
+  '  - UserDTO creator
+    - LocalDateTime creationTime
+    - Integer forbidden
+    }
+
+  RequestDTO "1" --* "1" ServiceDTO
+  RequestDTO "1" --* "1" DepartmentDTO
+  RequestDTO "1" --* "1" PersonDTO
+  RequestDTO "1" --* "1" StatusDTO
+  RequestDTO "1" -l-* "1" ApplicantDTO
+  RequestDTO "1" -r-* "1" RepresentativeDTO
+  RequestDTO "1" --* "1" DelegationDTO
+  RequestDTO "1" -u-* "1" UserDTO
+  RequestDTO "1" --* "1" PersonDTO
+  RequestDTO "1" --* "*" RequestCauseDTO
+  RequestDTO "1" -u-* "1" UserDTO
+
+  class DepartmentDTO {
+  - Long id
+  - String name
+  - Integer restrictions
+  }
+
+  class PersonDTO {
+  - Long id
+  - String name
+  - String lastName
+  - String firstName
+  - String patronymic
+  - String snils
+  - LocalDate birthday
+  - String inn
+  - String legalAddress
+  - String factAddress
+  - String phone
+  - String email
+  }
+
+  class StatusDTO {
+  - Long id
+  - String name
+  - Integer restrictions
+  - Integer creatorPermissions
+  }
+
+  class ApplicantDTO {
+  - Long id
+  - int applicantTypeId
+  - int typeId
+  - Long personId
+  - Long organizationId
+  - String name
+  - String inn
+  - String legalAddress
+  - String factAddress
+  - String phone
+  - String email
+  - String lastName
+  - String firstName
+  - String patronymic
+  - String snils
+  - LocalDate birthday
+  - String ogrn
+  - String fullName
+  - String kpp
+  }
+
+  class RepresentativeDTO {
+  - Long id
+  - int typeId
+  - Long personId
+  - Long organizationId
+  - String name
+  - String inn
+  - String legalAddress
+  - String factAddress
+  - String phone
+  - String email
+  - String lastName
+  - String firstName
+  - String patronymic
+  - String snils
+  - LocalDate birthday
+  - String ogrn
+  - String fullName
+  - String kpp
+  }
+
+  class DelegationDTO {
+  - Long id
+  - String position
+  - String name
+  - String num
+  - List<FileDTO> files
+  - LocalDate start
+  - LocalDate until
+  - String note
+  - String issuer
+  }
+
+  DelegationDTO --* "N" FileDTO
+
+  class UserDTO {
+  - Long id
+  - String name
+  }
+
+  class RequestCauseDTO {
+  - Long id
+  - CauseDTO cause
+  - String detail
+  - String recommendation
+  }
+
+  class FileDTO {
+    - String id
+    - String name
+    - Integer size
+    - String extension
+    - Integer orderNumber
+    - String mimeType
+    - String comment
+  }
+
+}
+@enduml

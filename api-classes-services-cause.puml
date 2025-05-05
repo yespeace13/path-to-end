@@ -1,34 +1,27 @@
 @startuml
-page 4x1
-top to bottom direction
-class api.FileController {
-  + void uploadFile(MultipartFile file, Long objectId)
-  + void deleteFile(Long fileId, Long objectId)
-  + void downloadFile(HttpServletResponse response, Long fileId)
-  + List<StoredFileDTO> getAll(Long objectId)
-  + StoredFileDTO getById(Long fileId)
-}
+package api {
+  class CauseController {
+    + ResponseListDTO<CauseDTO> getAll(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
+    + CauseDTO getOne(Long id)
+    + CauseDTO create(Long id)
+    + CauseDTO update(Long id, CauseDTO dto)
+    + void remove(Long id)
+  }
 
-class api.ServiceDocumentController {
-  + ResponseListDTO<ServiceDocumentDTO> getAll(EntityCondition filter, SortFields sort, LimitOffset limit, String registry, Long statusStage)
-  + ServiceDocumentDTO getOne(Long id)
-  + ServiceDocumentDTO create(Long id)
-  + ServiceDocumentDTO update(Long id, ServiceDocumentDTO dto)
-  + void remove(Long id)
-  + List<ServiceDocumentDTO> getProvidedDocumentTypes(Long,SortFields)
-}
-class api.ServiceService {
+  class CauseService {
+    + ResponseListDTO<CauseEntity> getServices(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
+    + CauseEntity getOne(Long id)
+    + CauseEntity create(Long id)
+    + CauseEntity update(Long id, CauseEntity dto)
+    + void remove(Long id)
+  }
 
-}
+  class CauseRepository {
+    + Class<CauseEntity> getEntityClass()
+  }
 
-
-class api.ServiceDocumentService {
-  + ResponseListDTO<ServiceDocumentEntity> getServices(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
-  + ServiceDocumentEntity getService(Long id)
-  + ServiceDocumentEntity createService(Long id)
-  + ServiceDocumentEntity updateService(Long id, ServiceDocumentEntity dto)
-  + void removeService(Long id)
-  + void changeServiceState(Long id, int stateId)
+  class ServiceService {
+  }
 }
 
 class infrastructure.DynamicMapper {
@@ -37,46 +30,45 @@ class infrastructure.DynamicMapper {
   + TEntity toEntity(TEntity entity, TView entity)
 }
 
-class dto.ServiceDocumentDTO {
+class dto.CauseDTO {
 - Long id
-- String cost
-- boolean personEnabled
-- boolean businessmanEnabled
-- boolean companyEnabled
+- String nameShort
+- String nameFull
 - LocalDate activeFrom
 - LocalDate activeTo
+- Long serviceId
 }
 
-class dto.FileDTO {
-- String id
-- String name
-- Integer size
-- String extension
-- Integer orderNumber
-- String mimeType
-- String comment
+package db {
+  class CauseEntity {
+  - String nameShort
+  - String nameFull
+  - boolean active
+  - LocalDate activeFrom
+  - LocalDate activeTo
+  - ServiceEntity service
+  }
+
+  class ServiceEntity {
+
+  }
+
+  ServiceEntity "1" *-- "*" CauseEntity
 }
-ServiceDocumentDTO "1" *-u- "1" FileDTO
+CauseController --> CauseDTO
+CauseController --> CauseService
+CauseController --> DynamicMapper
 
+CauseService --> CauseRepository
+CauseService --> CauseEntity
+CauseService --> ServiceService
 
-class api.ServiceDocumentRepository {
-+ Class<ServiceEntity> getEntityClass()
-+ List<ServiceEntity> findByNameShort(String)
-+ List<ServiceEntity> findByTextSearchOnAllAttr(String)
-}
+CauseRepository --> CauseEntity
 
-class db.ServiceDocumentEntity {
-}
+DynamicMapper --> CauseEntity
 
-ServiceDocumentController --|> FileController
-
-ServiceDocumentController -u-> ServiceDocumentDTO
-ServiceDocumentController --> ServiceDocumentService
-ServiceDocumentController -u-> DynamicMapper
-ServiceDocumentService --> ServiceDocumentRepository
-ServiceDocumentRepository --> ServiceDocumentEntity
-ServiceDocumentService --> ServiceDocumentEntity
-DynamicMapper --> ServiceDocumentEntity
-ServiceDocumentService --> ServiceService
-
+'interface repositories.AbstractRepository {
+'}
+'
+'CauseRepository --|> AbstractRepository
 @enduml

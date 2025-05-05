@@ -1,0 +1,80 @@
+@startuml
+class api.FileController {
+  + void uploadFile(MultipartFile file, Long objectId)
+  + void deleteFile(Long fileId, Long objectId)
+  + void downloadFile(HttpServletResponse response, Long fileId)
+  + List<StoredFileDTO> getAll(Long objectId)
+  + StoredFileDTO getById(Long fileId)
+}
+
+class api.RequestDocumentController {
+  + ResponseListDTO<RequestDocumentDTO> getAll(EntityCondition filter, SortFields sort, LimitOffset limit, String registry, Long statusStage)
+  + RequestDocumentDTO getOne(Long id)
+  + RequestDocumentDTO create(Long id)
+  + RequestDocumentDTO update(Long id, RequestDocumentDTO dto)
+  + void remove(Long id)
+  + List<RequestDocumentDTO> getProvidedDocumentTypes(Long,SortFields)
+}
+class api.RequestService {
+
+}
+
+
+class api.RequestDocumentService {
+  + ResponseListDTO<RequestDocumentEntity> getServices(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
+  + RequestDocumentEntity getService(Long id)
+  + RequestDocumentEntity createService(Long id)
+  + RequestDocumentEntity updateService(Long id, RequestDocumentEntity dto)
+  + void removeService(Long id)
+  + void changeServiceState(Long id, int stateId)
+}
+
+class infrastructure.DynamicMapper {
+  + TView toDto(TEntity entity)
+  + TEntity toEntity(TView entity)
+  + TEntity toEntity(TEntity entity, TView entity)
+}
+
+class dto.RequestDocumentDTO {
+- Long id
+- String cost
+- boolean personEnabled
+- boolean businessmanEnabled
+- boolean companyEnabled
+- LocalDate activeFrom
+- LocalDate activeTo
+}
+
+class dto.FileDTO {
+- String id
+- String name
+- Integer size
+- String extension
+- Integer orderNumber
+- String mimeType
+- String comment
+}
+RequestDocumentDTO "1" *-u- "1" FileDTO
+
+
+class api.RequestDocumentRepository {
++ Class<ServiceEntity> getEntityClass()
++ List<ServiceEntity> findByNameShort(String)
++ List<ServiceEntity> findByTextSearchOnAllAttr(String)
+}
+
+class db.RequestDocumentEntity {
+}
+
+RequestDocumentController --|> FileController
+
+RequestDocumentController -u-> RequestDocumentDTO
+RequestDocumentController --> RequestDocumentService
+RequestDocumentController -u-> DynamicMapper
+RequestDocumentService --> RequestDocumentRepository
+RequestDocumentRepository --> RequestDocumentEntity
+RequestDocumentService --> RequestDocumentEntity
+DynamicMapper --> RequestDocumentEntity
+RequestDocumentService --> RequestService
+
+@enduml

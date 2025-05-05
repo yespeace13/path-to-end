@@ -1,0 +1,58 @@
+@startuml
+package api {
+  class RequestController {
+    + ResponseListDTO<RequestDTO> getAll(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
+    + RequestDTO getOne(Long id)
+    + RequestDTO create(Long id)
+    + RequestDTO update(Long id, RequestDTO dto)
+    + void remove(Long id)
+  }
+
+  class RequestService {
+    + ResponseListDTO<RequestEntity> getServices(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
+    + RequestEntity getOne(Long id)
+    + RequestEntity create(Long id)
+    + RequestEntity update(Long id, RequestEntity dto)
+    + void remove(Long id)
+  }
+
+  class RequestRepository {
+    + Class<RequestEntity> getEntityClass()
+  }
+
+  class ServiceService {
+  }
+}
+
+class infrastructure.DynamicMapper {
+  + TView toDto(TEntity entity)
+  + TEntity toEntity(TView entity)
+  + TEntity toEntity(TEntity entity, TView entity)
+}
+package dto {
+  class RequestDTO {
+
+  }
+}
+
+
+package db {
+
+  class RequestEntity {
+
+  }
+
+}
+RequestController --> RequestDTO
+RequestController --> RequestService
+RequestController --> DynamicMapper
+
+RequestService --> RequestRepository
+RequestService --> RequestEntity
+RequestService --> ServiceService
+
+RequestRepository --> RequestEntity
+
+DynamicMapper --> RequestEntity
+
+@enduml

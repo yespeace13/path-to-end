@@ -1,0 +1,94 @@
+@startuml
+package api {
+  class ProviderController {
+    + ResponseListDTO<ProviderDTO> getAll(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
+    + ProviderDTO getOne(Long id)
+    + ProviderDTO create(Long id)
+    + ProviderDTO update(Long id, ProviderDTO dto)
+    + void remove(Long id)
+  }
+
+  class ProviderService {
+    + ResponseListDTO<ProviderEntity> getServices(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
+    + ProviderEntity getOne(Long id)
+    + ProviderEntity create(Long id)
+    + ProviderEntity update(Long id, ProviderEntity dto)
+    + void remove(Long id)
+  }
+
+  class ProviderRepository {
+    + Class<ProviderEntity> getEntityClass()
+  }
+
+  class ServiceService {
+  }
+}
+
+class infrastructure.DynamicMapper {
+  + TView toDto(TEntity entity)
+  + TEntity toEntity(TView entity)
+  + TEntity toEntity(TEntity entity, TView entity)
+}
+package dto {
+  class ProviderDTO {
+  - Long id
+  - String nameFull
+  - String nameShort
+  - String inn
+  - String kpp
+  - String ogrn
+  - String addressLegal
+  - String addressPostal
+  - String position
+  - String fio
+  - String contact
+  - String picUrl
+  - Integer restrictions
+  }
+
+  class TerritoryDTO {
+    - String name
+  }
+
+  ProviderDTO "1" *-- "1" TerritoryDTO
+}
+
+
+package db {
+
+  class TerritoryEntity {
+  - String name
+  }
+
+  class ProviderEntity {
+  - String nameFull
+  - String nameShort
+  - String inn
+  - String kpp
+  - String ogrn
+  - String addressLegal
+  - String addressPostal
+  - String position
+  - String fio
+  - String contact
+  - TerritoryEntity territory
+  - String picUrl
+  - int state
+  - Integer restrictions
+  }
+
+  TerritoryEntity "1" *-- "1" ProviderEntity
+}
+ProviderController --> ProviderDTO
+ProviderController --> ProviderService
+ProviderController --> DynamicMapper
+
+ProviderService --> ProviderRepository
+ProviderService --> ProviderEntity
+ProviderService --> ServiceService
+
+ProviderRepository --> ProviderEntity
+
+DynamicMapper --> ProviderEntity
+
+@enduml
