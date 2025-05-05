@@ -13,7 +13,6 @@ class api.RequestDocumentController {
   + RequestDocumentDTO create(Long id)
   + RequestDocumentDTO update(Long id, RequestDocumentDTO dto)
   + void remove(Long id)
-  + List<RequestDocumentDTO> getProvidedDocumentTypes(Long,SortFields)
 }
 class api.RequestService {
 
@@ -21,12 +20,11 @@ class api.RequestService {
 
 
 class api.RequestDocumentService {
-  + ResponseListDTO<RequestDocumentEntity> getServices(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
-  + RequestDocumentEntity getService(Long id)
-  + RequestDocumentEntity createService(Long id)
-  + RequestDocumentEntity updateService(Long id, RequestDocumentEntity dto)
-  + void removeService(Long id)
-  + void changeServiceState(Long id, int stateId)
+  + ResponseListDTO<RequestDocumentEntity> getAll(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
+  + RequestDocumentEntity getOne(Long id)
+  + RequestDocumentEntity create(Long id)
+  + RequestDocumentEntity update(Long id, RequestDocumentEntity dto)
+  + void remove(Long id)
 }
 
 class infrastructure.DynamicMapper {
@@ -63,9 +61,37 @@ class api.RequestDocumentRepository {
 + List<ServiceEntity> findByTextSearchOnAllAttr(String)
 }
 
-class db.RequestDocumentEntity {
-}
+package db {
+  class RequestDocumentEntity {
 
+  }
+
+  class DocumentEntity {
+  - Long entityTypeId
+  - CardViewEntity cardView
+  - String num
+  - String name
+  - String author
+  - LocalDate issuanceDate
+  - String description
+  - List<StoredFileEntity> files
+  - String signInfo
+  - int signStatus
+  - boolean externalSign
+  }
+
+  class RequestEntity {
+
+  }
+
+  class ServiceDocumentEntity {
+  }
+
+  RequestDocumentEntity --> DocumentEntity
+  RequestDocumentEntity <-- RequestEntity
+  RequestDocumentEntity --> ServiceDocumentEntity
+
+}
 RequestDocumentController --|> FileController
 
 RequestDocumentController -u-> RequestDocumentDTO
