@@ -1,0 +1,12 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+[-> ProcessingStatusRequestSheduler:processingRequestWithWorkStatus()
+ProcessingStatusRequestSheduler -> ProcessingStatusRequestService : run()
+ProcessingStatusRequestService -> ProcessingStatusRequestService : getRequestWorkStatus()
+loop Каждое заявление
+ProcessingStatusRequestService -> ProcessingStatusRequestService : processingRequest(request)
+ProcessingStatusRequestService -> ProcessingRequestMOpiService: processing(request)
+end
+@enduml

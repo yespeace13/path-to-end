@@ -1,0 +1,101 @@
+@startuml
+package api {
+  class StatusPathController {
+    + ResponseListDTO<StatusPathDTO> getAll(EntityCondition filter,\nSortFields sort, LimitOffset limit)
+    + StatusPathDTO getOne(Long id)
+    + StatusPathDTO create(Long id, StatusPathDTO dto)
+    + StatusPathDTO update(Long id, StatusPathDTO dto)
+    + void remove(Long id)
+  }
+
+  class StatusPathService {
+    + ResponseListDTO<StatusPathEntity> getAll(EntityCondition filter,\nSortFields sort, LimitOffset limit)
+    + StatusPathEntity getOne(Long id)
+    + StatusPathEntity create(Long id, StatusPathDTO dto)
+    + StatusPathEntity update(Long id, StatusPathEntity dto)
+    + void remove(Long id)
+  }
+
+  class StatusPathRepository {
+    + Class<StatusPathEntity> getEntityClass()
+  }
+}
+
+class infrastructure.DynamicMapper {
+  + TView toDto(TEntity entity)
+  + TEntity toEntity(TView entity)
+  + TEntity toEntity(TEntity entity, TView entity)
+}
+package dto {
+  class StatusPathDTO {
+    - Long id
+    - StatusDTO fromStatus
+    - StatusDTO toStatus
+    - String title
+    - String description
+    - boolean finished
+    - Integer restrictions
+    - Integer creatorPermissions
+    - String scriptText
+    - Integer sequenceNumber
+    - List<StatusNotifyDTO> statusNotifications
+    }
+
+    class StatusNotifyDTO {
+    - Long id
+    - Boolean notifyOwner
+    - Boolean notifyApplicant
+    - Boolean notifyActors
+    - Boolean notifySubscribers
+    - String messageTemplate
+    - String subjectTemplate
+    }
+
+    StatusPathDTO "1" --* "2" StatusDTO
+    StatusPathDTO --* StatusNotifyDTO
+    StatusGroupDTO "1" --> "N" StatusPathDTO
+}
+
+package db {
+
+  class StatusPathEntity {
+  - Long id
+  - String title
+  - String description
+  - boolean finished
+  - Integer restrictions
+  - Integer creatorPermissions
+  - String scriptText
+  - Integer sequenceNumber
+  }
+
+  class StatusNotifyEntity {
+  - Long id
+  - Boolean notifyOwner
+  - Boolean notifyApplicant
+  - Boolean notifyActors
+  - Boolean notifySubscribers
+  - String messageTemplate
+  - String subjectTemplate
+  }
+
+  StatusPathEntity "1" --* "2" StatusEntity
+  StatusPathEntity --* StatusNotifyEntity
+'  RequestEntity --> StatusPathEntity
+  StatusGroupEntity "1" --> "N" StatusPathEntity
+}
+
+
+StatusPathController --> StatusPathDTO
+StatusPathController --> StatusPathService
+StatusPathController --> DynamicMapper
+
+StatusPathService --> StatusPathRepository
+StatusPathService --> StatusPathEntity
+
+StatusPathRepository --> StatusPathEntity
+
+DynamicMapper --> StatusPathEntity
+DynamicMapper --> StatusPathDTO
+
+@enduml

@@ -1,0 +1,78 @@
+@startuml
+package api {
+  class StatusController {
+    + ResponseListDTO<StatusDTO> getAllByRequestId(Long id, EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
+    + StatusDTO getOne(Long requestId, Long id)
+    + StatusDTO create(Long requestId, Long id)
+    + StatusDTO update(Long requestId, Long id, StatusDTO dto)
+    + void remove(Long requestId, Long id)
+  }
+
+  class StatusService {
+    + ResponseListDTO<StatusEntity> get(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
+    + StatusEntity getOne(Long requestId, Long id)
+    + StatusEntity create(Long requestId, Long id)
+    + StatusEntity update(Long requestId, Long id, StatusEntity dto)
+    + void remove(Long requestId, Long id)
+  }
+
+  class StatusRepository {
+    + Class<StatusEntity> getEntityClass()
+  }
+}
+
+class infrastructure.DynamicMapper {
+  + TView toDto(TEntity entity)
+  + TEntity toEntity(TView entity)
+  + TEntity toEntity(TEntity entity, TView entity)
+}
+package dto {
+  class StatusDTO {
+   - Long id
+   - String name
+   - Integer restrictions
+   - Integer creatorPermissions
+   - Long stageId
+   }
+}
+
+package model {
+  enum StatusStageEnum {
+    REGISTRATION("Этап регистрации")
+    SIGNING("Этап подписания")
+  }
+}
+
+package db {
+
+  class StatusEntity {
+  - String name
+  - Integer restrictions
+  - Integer creatorPermissions
+  - Long stageId
+  - StatusStageEnum statusStage
+  }
+
+  class RequestEntity {
+
+  }
+
+  StatusEntity --> StatusStageEnum
+  RequestEntity --> StatusEntity
+
+}
+
+
+StatusController --> StatusDTO
+StatusController --> StatusService
+StatusController --> DynamicMapper
+
+StatusService --> StatusRepository
+StatusService --> StatusEntity
+
+StatusRepository --> StatusEntity
+
+DynamicMapper --> StatusEntity
+DynamicMapper --> StatusDTO
+
+@enduml
