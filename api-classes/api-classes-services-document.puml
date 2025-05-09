@@ -10,25 +10,22 @@ class api.FileController {
 }
 
 class api.ServiceDocumentController {
-  + ResponseListDTO<ServiceDocumentDTO> getAll(EntityCondition filter, SortFields sort, LimitOffset limit, String registry, Long statusStage)
-  + ServiceDocumentDTO getOne(Long id)
-  + ServiceDocumentDTO create(Long id)
-  + ServiceDocumentDTO update(Long id, ServiceDocumentDTO dto)
-  + void remove(Long id)
-  + List<ServiceDocumentDTO> getProvidedDocumentTypes(Long,SortFields)
+  + ResponseListDTO<ServiceDocumentDTO> getAll(EntityCondition filter, SortFields sort, LimitOffset limit, Long id)
+  + ServiceDocumentDTO getOne(Long id, Long documentId)
+  + ServiceDocumentDTO create(Long id, Long documentId)
+  + ServiceDocumentDTO update(Long id, Long documentId, ServiceDocumentDTO dto)
+  + void remove(Long id, Long documentId)
 }
 class api.ServiceService {
 
 }
 
-
 class api.ServiceDocumentService {
-  + ResponseListDTO<ServiceDocumentEntity> getServices(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
-  + ServiceDocumentEntity getService(Long id)
-  + ServiceDocumentEntity createService(Long id)
-  + ServiceDocumentEntity updateService(Long id, ServiceDocumentEntity dto)
-  + void removeService(Long id)
-  + void changeServiceState(Long id, int stateId)
+   + ResponseListDTO<ServiceDocumentDTO> getAll(EntityCondition filter, SortFields sort, LimitOffset limit, Long id)
+   + ServiceDocumentDTO getOne(Long id, Long documentId)
+   + ServiceDocumentDTO create(Long id, Long documentId)
+   + ServiceDocumentDTO update(Long id, Long documentId, ServiceDocumentDTO dto)
+   + void remove(Long id, Long documentId)
 }
 
 class infrastructure.DynamicMapper {
@@ -56,7 +53,7 @@ class dto.FileDTO {
 - String mimeType
 - String comment
 }
-ServiceDocumentDTO "1" *-u- "1" FileDTO
+ServiceDocumentDTO "1" *-l- "1" FileDTO
 
 
 class api.ServiceDocumentRepository {

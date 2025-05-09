@@ -1,7 +1,7 @@
 @startuml
 
 class api.ServiceController {
-  + ResponseListDTO<ServiceDTO> getServices(EntityCondition filter, SortFields sort, LimitOffset limit, String registry, Long statusStage)
+  + ResponseListDTO<ServiceDTO> getAll(EntityCondition filter, SortFields sort)
   + ServiceDTO getService(Long id)
   + ServiceDTO createService(Long id)
   + ServiceDTO updateService(Long id, ServiceDTO dto)
@@ -10,10 +10,10 @@ class api.ServiceController {
 }
 
 class api.ServiceService {
-  + ResponseListDTO<ServiceEntity> getServices(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
-  + ServiceEntity getService(Long id)
-  + ServiceEntity createService(Long id)
-  + ServiceEntity updateService(Long id, ServiceEntity dto)
+  + ResponseListDTO<ServiceDTO> getAll(EntityCondition filter, SortFields sort)
+  + ServiceDTO getService(Long id)
+  + ServiceDTO createService(Long id)
+  + ServiceDTO updateService(Long id, ServiceDTO dto)
   + void removeService(Long id)
   + void changeServiceState(Long id, int stateId)
 }
@@ -52,9 +52,14 @@ class db.ServiceEntity {
 
 ServiceController --> ServiceDTO
 ServiceController --> ServiceService
-ServiceController --> DynamicMapper
+
+ServiceService --> ServiceDTO
 ServiceService --> ServiceRepository
+ServiceService --> DynamicMapper
+
 ServiceRepository --> ServiceEntity
 ServiceService --> ServiceEntity
+
 DynamicMapper --> ServiceEntity
+DynamicMapper --> ServiceDTO
 @enduml
