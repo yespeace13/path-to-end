@@ -6,6 +6,7 @@ package api {
     + RequestDTO create(Long id)
     + RequestDTO update(Long id, RequestDTO dto)
     + void remove(Long id)
+    + changeRequestStatus(Long requestId, Long to)
   }
 
   class RequestService {
@@ -14,6 +15,7 @@ package api {
     + RequestEntity create(Long id)
     + RequestEntity update(Long id, RequestEntity dto)
     + void remove(Long id)
+    + changeRequestStatus(Long requestId, Long to)
   }
 
   class RequestRepository {

@@ -1,7 +1,7 @@
 @startuml
 package api {
   class ProviderController {
-    + ResponseListDTO<ProviderDTO> getAll(EntityCondition filter,\nSortFields sort, LimitOffset limit, String registry, Long statusStage)
+    + ResponseListDTO<ProviderDTO> getAll(EntityCondition filter,\nSortFields sort, LimitOffset limit)
     + ProviderDTO getOne(Long id)
     + ProviderDTO create(Long id)
     + ProviderDTO update(Long id, ProviderDTO dto)
@@ -81,8 +81,9 @@ package db {
 }
 ProviderController --> ProviderDTO
 ProviderController --> ProviderService
-ProviderController --> DynamicMapper
 
+ProviderService --> ProviderDTO
+ProviderService --> DynamicMapper
 ProviderService --> ProviderRepository
 ProviderService --> ProviderEntity
 ProviderService --> ServiceService

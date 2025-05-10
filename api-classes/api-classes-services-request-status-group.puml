@@ -3,16 +3,16 @@ package api {
   class StatusGroupController {
     + ResponseListDTO<StatusGroupDTO> getAll(EntityCondition filter,\nSortFields sort, LimitOffset limit)
     + StatusGroupDTO getOne(Long id)
-    + StatusGroupDTO create(Long id)
+    + StatusGroupDTO create(StatusGroupDTO)
     + StatusGroupDTO update(Long id, StatusGroupDTO dto)
     + void remove(Long id)
   }
 
   class StatusGroupService {
-    + ResponseListDTO<StatusGroupEntity> getAll(EntityCondition filter,\nSortFields sort, LimitOffset limit)
-    + StatusGroupEntity getOne(Long id)
-    + StatusGroupEntity create(Long id)
-    + StatusGroupEntity update(Long id, StatusGroupEntity dto)
+    + ResponseListDTO<StatusGroupDTO> getAll(EntityCondition filter,\nSortFields sort, LimitOffset limit)
+    + StatusGroupDTO getOne(Long id)
+    + StatusGroupDTO create(StatusGroupDTO)
+    + StatusGroupDTO update(Long id, StatusGroupDTO dto)
     + void remove(Long id)
   }
 
@@ -35,10 +35,10 @@ package dto {
    - Long stageId
    }
 
-   class StatusDTO {
-   }
+'   class StatusDTO {
+'   }
 
-   StatusGroupDTO --* StatusDTO
+'   StatusGroupDTO --* StatusDTO
 }
 
 package db {
@@ -51,7 +51,7 @@ package db {
   }
 
 
-  StatusGroupEntity --> StatusEntity
+'  StatusGroupEntity --> StatusEntity
 '  RequestEntity --> StatusGroupEntity
 
 }
@@ -61,6 +61,7 @@ StatusGroupController --> StatusGroupDTO
 StatusGroupController --> StatusGroupService
 StatusGroupController --> DynamicMapper
 
+StatusGroupService --> StatusGroupDTO
 StatusGroupService --> StatusGroupRepository
 StatusGroupService --> StatusGroupEntity
 
