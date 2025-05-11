@@ -1,0 +1,28 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+[-> ProcessingStatusRequestSheduler:processingRequestWithWorkStatus()
+ProcessingStatusRequestSheduler -> ProcessingStatusRequestService : run()
+ProcessingStatusRequestService -> ProcessingStatusRequestService : getRequestWorkStatus()
+loop Каждое заявление
+ProcessingStatusRequestService -> ProcessingRequestMOpiService: processing(request)
+ProcessingRequestMOpiService -> CustomTisProperties : getPathAttrGisMopi()
+ProcessingRequestMOpiService -> ProcessingWorkWithGisService : getGisObject(request, path)
+ProcessingRequestMOpiService -> ProcessingWorkWithGisService : isIntersectHmao(gisLayerRequestNew, buffer, guid)
+
+alt Если нет пересечения
+  ProcessingRequestMOpiService -> ProcessingRequestMOpiService : typeFinalDocument = APPLICATION_3
+else Если есть пересечение
+
+  ProcessingRequestMOpiService -> ProcessingRequestMOpiService : makeIntersection(request, gisObjects, guid)
+  ProcessingRequestMOpiService -> ProcessingWorkWithGisService : intersectResult = getGisIntersections(request, gisObjects, guid)
+  ProcessingRequestMOpiService -> ProcessingWorkWithGisService : saveIntersections(request, gisObjects, interspectResult, buffer)
+  ProcessingWorkWithGisService -> RequestService : save(request)
+  ProcessingRequestMOpiService -> ProcessingRequestMOpiService : typeFinalDocument = getTypeResult(request, layers)
+end
+
+ProcessingRequestMOpiService -> ProcessingFinalDocument2Service : createFinalDocument(request)
+
+end
+@enduml

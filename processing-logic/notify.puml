@@ -1,0 +1,18 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+
+ProcessingRequestMOpiService -> ProcessingRequestMOpiService : setFinalStatus(request)
+ProcessingRequestMOpiService -> CustomTisProperties : status = getStatusFinal()
+ProcessingRequestMOpiService -> ProcessingRequestMOpiService : path = getStatusPath(request, status)
+ProcessingRequestMOpiService -> ProcessingRequestMOpiService : changeStatus(request, nextStatus)
+ProcessingRequestMOpiService -> RequestRepository : save(request)
+ProcessingRequestMOpiService -> StatusHistoryService : addStatusHistory(request)
+StatusHistoryService -> StatusHistoryRepository : save(history)
+ProcessingRequestMOpiService -> UserNotificationService : sendNotifyUsers(request, statusPath)
+UserNotificationService -> UserNotificationService : sendMessage(notification)
+UserNotificationService -> JavaMailSender : notification = send(message)
+UserNotificationService ->  UserNotificationRepository : save(notification)
+
+@enduml

@@ -83,12 +83,18 @@ class ServiceDurationDTO {
 
 class ServiceDocumentDTO {
 - Long id
-- String cost
+- String nameFull
+- String nameShort
+- int documentCategoryId
+- LocalDate activeFrom
+- LocalDate activeTo
+- String notes
+- boolean mandatory
 - boolean personEnabled
 - boolean businessmanEnabled
 - boolean companyEnabled
-- LocalDate activeFrom
-- LocalDate activeTo
+- Boolean signRequired
+- Integer restrictions
 }
 
 ServiceDTO "1" *-- "1" ReglamentDTO

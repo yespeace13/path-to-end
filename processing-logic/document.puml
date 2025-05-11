@@ -1,0 +1,19 @@
+@startuml
+'https://plantuml.com/sequence-diagram
+
+autonumber
+ProcessingRequestMOpiService -> ProcessingFinalDocument2Service : createFinalDocument(request)
+ProcessingFinalDocument2Service -> RequestDocumentService : requestDocument = createEmptyResultDocument(serviceDocument)
+ProcessingFinalDocument2Service -> ProcessingFinalDocument2Service : addFinalDocFile(requestDocument, documentEntity)
+ProcessingFinalDocument2Service -> DocxGeneratorService : generateDocxByDocument(requestDocument)
+DocxGeneratorService -> GroovyScriptService : generateReportData(serviceDocument)
+DocxGeneratorService -> DocxGeneratorService : generateDocxTemplate(fileTemplate)
+DocxGeneratorService -> ProcessingFinalDocument2Service : file
+ProcessingFinalDocument2Service -> ProcessingFinalDocument2Service : storeFile(file)
+ProcessingFinalDocument2Service -> StoredFileRepository : insert(file)
+
+ProcessingFinalDocument2Service -> RequestDocumentService : save(document)
+ProcessingFinalDocument2Service -> ProcessingRequestMOpiService : document
+ProcessingRequestMOpiService -> ProcessingCustomService : sign(document)
+ProcessingCustomService -> DocumentService : save(document)
+@enduml
