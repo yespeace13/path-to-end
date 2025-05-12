@@ -1,0 +1,30 @@
+@startuml Architecture
+package "cmp AstraLinux" {
+
+    component "Веб браузер пользователя" as browser
+
+    package "backend-docker-app"{
+
+        component "ВЕБ Сервер NGINX" as nginx
+        component "Frontend" <<TypeScript/Angular>> as client
+        component "core" <<Java/Spring Boot>> as core
+    }
+
+     package "backend-docker-tools"{
+        component "geoserver-tools" <<Java/Spring Boot>> as tools
+     }
+
+     component "GeoServer" as geoserver
+
+     component "Database" <<Postgresql>> as db
+}
+browser <..> nginx : https
+nginx <..> client : https
+
+core <..>nginx
+core <..> tools : https
+tools <..> geoserver
+client <..>geoserver
+db <..> core
+geoserver <..> db
+@enduml
