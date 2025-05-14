@@ -1,0 +1,57 @@
+@startuml
+start
+
+:Округлить координаты bBox;
+note right
+  minX = round(bBox.getMinX())
+  minY = round(bBox.getMinY())
+  maxX = round(bBox.getMaxX())
+  maxY = round(bBox.getMaxY())
+end note
+
+:Вычислить ширину и высоту;
+note right
+  width = maxX - minX
+  height = maxY - minY
+end note
+
+:Установить базовые параметры;
+note right
+  sm = 16 см (ширина картинки)
+  scaleStart = (scaleStart == null OR <10) ? 10 : scaleStart
+  coefficient = 1.3
+  i = 0
+end note
+
+repeat
+  if (i == 10) then (да)
+    :scaleStart *= 10;
+    :i = 0;
+  endif
+
+  :i++;
+  :scaleWidth = scaleStart * i * sm;
+repeat while (scaleWidth < width*coefficient OR scaleWidth < height*coefficient?) is (нет)
+->yes;
+
+:Вычислить разницу по ширине;
+note right
+  differenceWidth = (scaleWidth - width) / 2
+  bBox.setMinX(minX - differenceWidth)
+  bBox.setMaxX(maxX + differenceWidth)
+end note
+
+:Вычислить разницу по высоте;
+note right
+  differenceHeight = (scaleWidth - height) / 2
+  bBox.setMinY(minY - differenceHeight)
+  bBox.setMaxY(maxY + differenceHeight)
+end note
+
+:Установить масштаб;
+note right
+  bBox.setScale(scaleWidth)
+end note
+
+stop
+@enduml
