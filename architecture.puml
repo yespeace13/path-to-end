@@ -16,7 +16,11 @@ package "cmp AstraLinux" {
 
      component "GeoServer" as geoserver
 
-     component "Database" <<Postgresql>> as db
+     component "Database" <<Postgresql>> as db1
+     component "Database" <<Postgresql>> as db2
+
+     component "cloner" as cloner1
+     component "cloner" as cloner2
 }
 browser <..> nginx : https
 nginx <..> client : https
@@ -25,6 +29,10 @@ core <..>nginx
 core <..> tools : https
 tools <..> geoserver
 client <..>geoserver
-db <..> core
-geoserver <..> db
+db1 <..> core
+geoserver <..> db1
+geoserver <..> db2
+
+db1 <..> cloner1
+db2 <..> cloner2
 @enduml
